@@ -1,0 +1,47 @@
+A simple bot which exposes HTTP verbs over XMPP. Currently only 
+really useful for HTTP debugging as it returns the unmassaged contents of the
+response and doesn't allow you to send data. Both of these issues I plan to
+address, along with adding a few other features:
+
+* Convert responses to JSON or something else readable
+* Adding a custom header to the request for user agent detection
+* Allow sending of data for relevant methods
+* Provide access to headers as well as content
+* Provide a mechanism to register processors for responses, for instance validation routines or test searches
+
+h2. Requirements
+
+You'll need a couple of external libraries to make everything work correctly and deal with the low level XMPP bits.
+
+# xmpppy
+# JabberBot - http://thpinfo.com/2007/python-jabberbot/
+
+Either place these in the same directory as the included files or elsewhere on your Python Path.
+
+h2. Running
+
+# Specify your username and password in the settings.py file.
+# Run the daemon.py command without any arguments.
+
+<pre>python daemon.py</pre>
+
+h2. Thanks
+
+The REST HTTP Client code was taken from a patch on http://code.djangoproject.com/ticket/5888 along with some modifications done by Stuart Langridge <http://kryogenix.org>.
+
+The JabberBot framework is Copyright (c) 2007 Thomas Perl <thp@thpinfo.com> and released under the GNU General Public License. 
+
+h2. License
+
+Except where otherwise noted:
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
+AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
