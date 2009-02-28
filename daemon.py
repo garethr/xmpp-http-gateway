@@ -10,8 +10,13 @@ response and doesn't allow you to send data.
 
 """
 
+__author__ = 'Gareth Rushgrove <gareth@morethanseven.net>'
+__version__ = '0.1'
+
+import httplib2
+
 from jabberbot import JabberBot
-from rest_client import RestClient
+from restful_lib import Connection
 
 # remember to setup your settings file
 try:
@@ -20,37 +25,58 @@ except ImportError, error:
     print "You have to create a local settings file (Error: %s)" % error
     sys.exit(1)
 
+CONNECTION_ERROR = "Unable to connect to %s"
+
 class GatewayJabberBot(JabberBot):
     """
-    A bot that provides the ability to make various types of HTTP 
-    request via XMPP.
+    A bot that can make various types of HTTP request over XMPP.
     """
-    client = RestClient()
+    
+    def _connect(self, args):
+        list_of_args = args.split(" ")
+        conn = Connection(list_of_args[0])
+        return conn, list_of_args
             
     def bot_get(self, mess, args):
         "Make a HTTP GET request of the passed URL"
-        return self.client.get(args).content
+        try:
+            conn, list_of_args = self._connect(args)
+            return conn.request_get("/")
+        except httplib2.ServerNotFoundError:
+            return CONNECTION_ERROR % list_of_args[0]
         
     def bot_post(self, mess, args):
         "Make a HTTP POST request of the passed URL"
-        return self.client.post(args).content
+        try:
+            conn, list_of_args = self._connect(args)
+            return conn.request_post("/")
+        except httplib2.ServerNotFoundError:
+            return CONNECTION_ERROR % list_of_args[0]        
 
     def bot_put(self, mess, args):
         "Make a HTTP PUT request of the passed URL"
-        return self.client.put(args).content
+        try:
+            conn, list_of_args = self._connect(args)
+            return conn.request_put("/")
+        except httplib2.ServerNotFoundError:
+            return CONNECTION_ERROR % list_of_args[0]        
 
     def bot_delete(self, mess, args):
         "Make a HTTP DELETE request of the passed URL"
-        return self.client.delete(args).content
+        try:
+            conn, list_of_args = self._connect(args)
+            return conn.request_delete("/")
+        except httplib2.ServerNotFoundError:
+            return CONNECTION_ERROR % list_of_args[0]
 
     def bot_head(self, mess, args):
         "Make a HTTP HEAD request of the passed URL"
-        return self.client.head(args).content
-
-    def bot_options(self, mess, args):
-        "Make a HTTP OPTIONS request of the passed URL"
-        return self.client.options(args).content
-
+        try:
+            conn, list_of_args = self._connect(args)
+            return conn.request_head("/")
+        except httplib2.ServerNotFoundError:
+            return CONNECTION_ERROR % list_of_args[0]
+    
     # I'll have a nice error handler one day
     def unknown_command(self, mess, cmd, args):
         "If you call a command we don't regonise we output a nice message"
